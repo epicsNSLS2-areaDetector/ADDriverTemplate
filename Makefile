@@ -2,13 +2,13 @@
 TOP = .
 include $(TOP)/configure/CONFIG
 DIRS := $(DIRS) configure
-DIRS := $(DIRS) evtApp
-DIRS := $(DIRS) evtSupport
+DIRS := $(DIRS) DRIVERNAMELOWERSHORTApp
+DIRS := $(DIRS) DRIVERNAMELOWERSHORTSupport
 
 evtApp_DEPEND_DIRS += evtSupport
 ifeq ($(BUILD_IOCS), YES)
 DIRS := $(DIRS) $(filter-out $(DIRS), $(wildcard iocs))
-iocs_DEPEND_DIRS += evtApp
+iocs_DEPEND_DIRS += DRIVERNAMELOWERSHORTApp
 endif
 include $(TOP)/configure/RULES_TOP
 
