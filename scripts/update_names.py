@@ -19,9 +19,10 @@ def walk_through_dirs(driverNameLowerShort, driverNameStandard):
                 newName = update_dir_file_name(dirpath, dirname, driverNameLowerShort, driverNameStandard)
                 paths.append([os.path.join(dirpath, dirname), newName])
 
-        paths.reverse()
-        for path in paths:
-            os.rename(path[0], path[1])
+    paths.reverse()
+    for path in paths:
+        #os.rename(path[0], path[1])
+        print("Replacing {}".format(path))
 
 def walk_through_files(driverNameLower, driverNameLowerShort, driverNameStandard):
     for dirpath, dirnames, filenames in os.walk(".."):
