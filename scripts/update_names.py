@@ -21,8 +21,8 @@ def walk_through_dirs(driverNameLowerShort, driverNameStandard):
 
     paths.reverse()
     for path in paths:
-        #os.rename(path[0], path[1])
-        print("Replacing {}".format(path))
+        os.rename(path[0], path[1])
+        #print("Replacing {}".format(path))
 
 def walk_through_files(driverNameLower, driverNameLowerShort, driverNameStandard):
     for dirpath, dirnames, filenames in os.walk(".."):
@@ -107,6 +107,6 @@ def parse_args():
 
 
 # calls other functions
-#parse_args()
+parse_args()
 
-walk_through_dirs("uvc", "UVC")
+#walk_through_dirs("uvc", "UVC")
