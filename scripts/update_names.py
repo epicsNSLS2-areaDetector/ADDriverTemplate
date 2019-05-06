@@ -10,92 +10,87 @@
 import os
 import argparse
 
+def walk_through_dirs(driverNameLowerShort, driverNameStandard):
+    for dirpath, dirnames, filenames in os.walk(".."):
+        for dirname in dirnames:
+            if ".git" not in os.path.join(dirpath, dirname):
+                newName = update_dir_file_name(os.path.join(dirpath, dirname), driverNameLowerShort, driverNameStandard)
+                os.rename(os.path.join(dirpath, dirname), newName)
 
-# Updates the name of the main plugin directory
-def update_dir_names(all_lowercase):
-    if os.path.exists("../pluginApp"):
-        os.rename("../pluginApp", "../"+all_lowercase+"App")
+
+def walk_through_files(driverNameLower, driverNameLowerShort, driverNameStandard):
+    for dirpath, dirnames, filenames in os.walk(".."):
+        for filename in filenames:
+            if ".git" not in os.path.join(dirpath, filename):
+                newName = update_dir_file_name(os.path.join(dirpath, filename), driverNameLowerShort, driverNameStandard)
+                os.rename(os.path.join(dirpath, filename), newName)
+                update_sources(newName, driverNameLowerShort, driverNameLower, driverNameLower.upper(), driverNameStandard)
+
+
 
 # Updates the filenames of all of the plugin specific files. Also updates the contents of all files that are not in the src dir
-def update_file_names(all_lowercase, standard_name):
-    if os.path.exists("../"+all_lowercase+"App/src/NDPlugin___.cpp"):
-        os.rename("../"+all_lowercase+"App/src/NDPlugin___.cpp", "../"+all_lowercase+"App/src/NDPlugin"+standard_name+".cpp")
-    if os.path.exists("../"+all_lowercase+"App/src/NDPlugin___.h"):
-        os.rename("../"+all_lowercase+"App/src/NDPlugin___.h", "../"+all_lowercase+"App/src/NDPlugin"+standard_name+".h")
-    if os.path.exists("../"+all_lowercase+"App/src/NDPlugin___.dbd"):
-        os.rename("../"+all_lowercase+"App/src/NDPlugin___.dbd", "../"+all_lowercase+"App/src/NDPlugin"+standard_name+".dbd")
-    if os.path.exists("../"+all_lowercase+"App/Db/NDPlugin___.template"):
-        os.rename("../"+all_lowercase+"App/Db/NDPlugin___.template", "../"+all_lowercase+"App/Db/NDPlugin"+standard_name+".template")
-    if os.path.exists("../"+all_lowercase+"App/Db/NDPlugin___settings.req"):
-        os.rename("../"+all_lowercase+"App/Db/NDPlugin___settings.req", "../"+all_lowercase+"App/Db/NDPlugin"+standard_name+"_settings.req")
-    if(os.path.exists("../"+all_lowercase+"App/Db/Makefile")):
-        update_source_file(all_lowercase, all_lowercase.upper(), standard_name, "../"+all_lowercase+"App/Db/Makefile")
-    if(os.path.exists("../"+all_lowercase+"App/Db/NDPlugin"+standard_name+".template")):
-        update_source_file(all_lowercase, all_lowercase.upper(), standard_name, "../"+all_lowercase+"App/Db/NDPlugin"+standard_name+".template")
-    if(os.path.exists("../docs/index.html")):
-        update_source_file(all_lowercase, all_lowercase.upper(), standard_name, "../docs/index.html")
-    if(os.path.exists("../RELEASE.md")):
-        update_source_file(all_lowercase, all_lowercase.upper(), standard_name, "../RELEASE.md")
-    if(os.path.exists("add_pv.py")):
-        update_source_file(all_lowercase, all_lowercase.upper(), standard_name, "add_pv.py")
+def update_dir_file_name(path, driverNameLowerShort, driverNameStandard):
+    if "DRIVERNAMESTANDARD" in path:
+        return path.replace("DRIVERNAMESTANDARD", driverNameStandard))
+    elif "DRIVERNAMELOWERSHORT" in path:
+        return path.replace("DRIVERNAMELOWERSHORT", driverNameLowerShort)
+
 
 # Reads file line by line and updates specific locations with correct plugin name
-def update_source_file(all_lowercase, all_uppercase, standard_name, file_path):
-    os.rename(file_path, file_path+"_OLD")
-    oldFile = open(file_path+"_OLD", "r")
-    newFile = open(file_path, "w")
+def update_sources(path, lower_short, all_lowercase, all_uppercase, standard_name):
+    os.rename(path, path+"_OLD")
+    oldFile = open(path+"_OLD", "r")
+    newFile = open(path, "w")
 
     line = oldFile.readline()
     while(line):
-        if "PLUGINNAMESTANDARD" in line:
-            line = line.replace("PLUGINNAMESTANDARD", standard_name)
-        if "PLUGINNAMEUPPER" in line:
-            line = line.replace("PLUGINNAMEUPPER", all_uppercase)
-        if "PLUGINNAMELOWER" in line:
-            line = line.replace("PLUGINNAMELOWER", all_lowercase)
+        if "DRIVERNAMESTANDARD" in line:
+            line = line.replace("DRIVERNAMESTANDARD", standard_name)
+        if "DRIVERNAMEUPPER" in line:
+            line = line.replace("DRIVERNAMEUPPER", all_uppercase)
+        if "DRIVERNAMELOWER" in line:
+            line = line.replace("DRIVERNAMELOWER", all_lowercase)
+        if "DRIVERNAMELOWERSHORT" in line:
+            line = line.replace("DRIVERNAMELOWERSHORT", lower_short)
         newFile.write(line)
         line = oldFile.readline()
 
     oldFile.close()
     newFile.close()
-    os.remove(file_path+"_OLD")
+    os.remove(path+"_OLD")
 
-
-# Updates all of the files located in the src dir
-def update_sources(all_lowercase, all_uppercase, standard_name):
-    if os.path.exists("../"+all_lowercase+"App/src"):
-        src_dir = "../"+all_lowercase+"App/src"
-        for file in os.listdir(src_dir):
-            if(os.path.isfile(src_dir+"/"+file)):
-                update_source_file(all_lowercase, all_uppercase, standard_name, src_dir + "/" + file)
 
 
 # Renames the plugin root directory to reflect the new plugin name
 def update_root_dir(standard_name):
     for directory_name in os.listdir("../.."):
-        if "ADPluginTemplate" in directory_name:
-            os.rename("../../"+directory_name, "../../ADPlugin"+standard_name)
+        if "ADDriverTemplate" in directory_name:
+            os.rename("../../"+directory_name, "../../AD"+standard_name)
 
 
 
 
 # Parses name from user args in command line
 def parse_args():
-    parser = argparse.ArgumentParser(description="Update plugin names in template")
-    parser.add_argument('-n', '--name', help = 'Name of the driver without AD, ex. ')
-    parser.add_argument('-s', '--short', help = 'Shorthand name for the driver. Ex. EmergentVision shorthand could be evt')
+    parser = argparse.ArgumentParser(description="Update driver names in template")
+    parser.add_argument('-n', '--name', help = 'Name of the driver without AD, ex. EmergentVision')
+    parser.add_argument('-s', '--short', help = 'Shorthand name for the driver. Ex. EmergentVision shorthand could be evt. If not used, full name will be shorthand')
     arguments = vars(parser.parse_args())
 
     if arguments["name"] is not None:
         name = arguments["name"]
         all_lowercase = name.lower()
-        all_uppercase = name.upper()
-        standard_name = all_lowercase.capitalize()
+        standard_name = name
+        lower_short = ""
 
-        update_dir_names(all_lowercase)
-        update_file_names(all_lowercase, standard_name)
-        update_sources(all_lowercase, all_uppercase, standard_name)
+        if arguments["short"] is not None:
+            lower_short = arguments[short].lower()
+        else:
+            lower_short = all_lowercase
+
         update_root_dir(standard_name)
+        walk_through_dirs(lower_short, standard_name)
+        walk_through_files(all_lowercase, lower_short, standard_name)
 
     else:
         print("Error, no plugin name specified")
