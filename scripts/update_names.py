@@ -35,30 +35,34 @@ def update_dir_file_name(path, driverNameLowerShort, driverNameStandard):
         return path.replace("DRIVERNAMESTANDARD", driverNameStandard)
     elif "DRIVERNAMELOWERSHORT" in path:
         return path.replace("DRIVERNAMELOWERSHORT", driverNameLowerShort)
+    else:
+        return path
 
 
 # Reads file line by line and updates specific locations with correct plugin name
 def update_sources(path, lower_short, all_lowercase, all_uppercase, standard_name):
-    os.rename(path, path+"_OLD")
-    oldFile = open(path+"_OLD", "r")
-    newFile = open(path, "w")
 
-    line = oldFile.readline()
-    while(line):
-        if "DRIVERNAMESTANDARD" in line:
-            line = line.replace("DRIVERNAMESTANDARD", standard_name)
-        if "DRIVERNAMEUPPER" in line:
-            line = line.replace("DRIVERNAMEUPPER", all_uppercase)
-        if "DRIVERNAMELOWER" in line:
-            line = line.replace("DRIVERNAMELOWER", all_lowercase)
-        if "DRIVERNAMELOWERSHORT" in line:
-            line = line.replace("DRIVERNAMELOWERSHORT", lower_short)
-        newFile.write(line)
+    if path != "update_names.py":
+        os.rename(path, path+"_OLD")
+        oldFile = open(path+"_OLD", "r")
+        newFile = open(path, "w")
+
         line = oldFile.readline()
+        while(line):
+            if "DRIVERNAMESTANDARD" in line:
+                line = line.replace("DRIVERNAMESTANDARD", standard_name)
+            if "DRIVERNAMEUPPER" in line:
+                line = line.replace("DRIVERNAMEUPPER", all_uppercase)
+            if "DRIVERNAMELOWER" in line:
+                line = line.replace("DRIVERNAMELOWER", all_lowercase)
+            if "DRIVERNAMELOWERSHORT" in line:
+                line = line.replace("DRIVERNAMELOWERSHORT", lower_short)
+            newFile.write(line)
+            line = oldFile.readline()
 
-    oldFile.close()
-    newFile.close()
-    os.remove(path+"_OLD")
+        oldFile.close()
+        newFile.close()
+        os.remove(path+"_OLD")
 
 
 
