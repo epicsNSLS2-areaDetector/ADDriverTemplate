@@ -12,31 +12,35 @@ import argparse
 import shutil
 
 def walk_through_dirs(driverNameLowerShort, driverNameStandard):
+    paths = []
     for dirpath, dirnames, filenames in os.walk(".."):
         for dirname in dirnames:
             if ".git" not in os.path.join(dirpath, dirname):
-                newName = update_dir_file_name(os.path.join(dirpath, dirname), driverNameLowerShort, driverNameStandard)
-                os.rename(os.path.join(dirpath, dirname), newName)
+                newName = update_dir_file_name(dirpath, dirname, driverNameLowerShort, driverNameStandard)
+                paths.append([os.path.join(dirpath, dirname), newName])
 
+        paths.reverse()
+        for path in paths:
+            os.rename(path[0], path[1])
 
 def walk_through_files(driverNameLower, driverNameLowerShort, driverNameStandard):
     for dirpath, dirnames, filenames in os.walk(".."):
         for filename in filenames:
             if ".git" not in os.path.join(dirpath, filename):
-                newName = update_dir_file_name(os.path.join(dirpath, filename), driverNameLowerShort, driverNameStandard)
+                newName = update_dir_file_name(dirpath, filename, driverNameLowerShort, driverNameStandard)
                 os.rename(os.path.join(dirpath, filename), newName)
                 update_sources(newName, driverNameLowerShort, driverNameLower, driverNameLower.upper(), driverNameStandard)
 
 
 
 # Updates the filenames of all of the plugin specific files. Also updates the contents of all files that are not in the src dir
-def update_dir_file_name(path, driverNameLowerShort, driverNameStandard):
-    if "DRIVERNAMESTANDARD" in path:
-        return path.replace("DRIVERNAMESTANDARD", driverNameStandard)
-    elif "DRIVERNAMELOWERSHORT" in path:
-        return path.replace("DRIVERNAMELOWERSHORT", driverNameLowerShort)
+def update_dir_file_name(path, name, driverNameLowerShort, driverNameStandard):
+    if "DRIVERNAMESTANDARD" in name:
+        return os.path.join(path, name.replace("DRIVERNAMESTANDARD", driverNameStandard))
+    elif "DRIVERNAMELOWERSHORT" in name:
+        return os.path.join(path, name.replace("DRIVERNAMELOWERSHORT", driverNameLowerShort))
     else:
-        return path
+        return os.path.join(path, name)
 
 
 # Reads file line by line and updates specific locations with correct plugin name
@@ -102,4 +106,6 @@ def parse_args():
 
 
 # calls other functions
-parse_args()
+#parse_args()
+
+walk_through_dirs("uvc", "UVC")
