@@ -9,6 +9,7 @@
 
 import os
 import argparse
+import shutil
 
 def walk_through_dirs(driverNameLowerShort, driverNameStandard):
     for dirpath, dirnames, filenames in os.walk(".."):
@@ -31,7 +32,7 @@ def walk_through_files(driverNameLower, driverNameLowerShort, driverNameStandard
 # Updates the filenames of all of the plugin specific files. Also updates the contents of all files that are not in the src dir
 def update_dir_file_name(path, driverNameLowerShort, driverNameStandard):
     if "DRIVERNAMESTANDARD" in path:
-        return path.replace("DRIVERNAMESTANDARD", driverNameStandard))
+        return path.replace("DRIVERNAMESTANDARD", driverNameStandard)
     elif "DRIVERNAMELOWERSHORT" in path:
         return path.replace("DRIVERNAMELOWERSHORT", driverNameLowerShort)
 
@@ -65,7 +66,7 @@ def update_sources(path, lower_short, all_lowercase, all_uppercase, standard_nam
 def update_root_dir(standard_name):
     for directory_name in os.listdir("../.."):
         if "ADDriverTemplate" in directory_name:
-            os.rename("../../"+directory_name, "../../AD"+standard_name)
+            shutil.move("../../"+directory_name, "../../AD"+standard_name)
 
 
 
