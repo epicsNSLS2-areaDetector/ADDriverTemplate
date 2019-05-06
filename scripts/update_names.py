@@ -89,7 +89,7 @@ def parse_args():
         lower_short = ""
 
         if arguments["short"] is not None:
-            lower_short = arguments[short].lower()
+            lower_short = arguments["short"].lower()
         else:
             lower_short = all_lowercase
 
