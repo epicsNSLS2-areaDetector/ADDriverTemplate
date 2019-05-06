@@ -58,10 +58,10 @@ def update_sources(path, lower_short, all_lowercase, all_uppercase, standard_nam
                 line = line.replace("DRIVERNAMESTANDARD", standard_name)
             if "DRIVERNAMEUPPER" in line:
                 line = line.replace("DRIVERNAMEUPPER", all_uppercase)
-            if "DRIVERNAMELOWER" in line:
-                line = line.replace("DRIVERNAMELOWER", all_lowercase)
             if "DRIVERNAMELOWERSHORT" in line:
                 line = line.replace("DRIVERNAMELOWERSHORT", lower_short)
+            if "DRIVERNAMELOWER" in line:
+                line = line.replace("DRIVERNAMELOWER", all_lowercase)
             newFile.write(line)
             line = oldFile.readline()
 
