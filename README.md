@@ -11,7 +11,7 @@ wget https://github.com/epicsNSLS2-areaDetector/ADDriverTemplate/archive/R0.1.ta
 ```
 if you prefer tar over zip.
 
-**DO NOT CLONE THIS REPOSITORY WHEN WRITING A NEW PLUGIN**
+**DO NOT CLONE THIS REPOSITORY WHEN WRITING A NEW DRIVER!**
 
 If you do, the git information will be cloned as well, and version control for your plugin will
 contain all changes made to this template.
