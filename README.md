@@ -11,9 +11,9 @@ wget https://github.com/epicsNSLS2-areaDetector/ADDriverTemplate/archive/R0.1.ta
 ```
 if you prefer tar over zip.
 
-**DO NOT CLONE THIS REPOSITORY WHEN WRITING A NEW PLUGIN**
+**DO NOT CLONE THIS REPOSITORY WHEN WRITING A NEW DRIVER**
 
-If you do, the git information will be cloned as well, and version control for your plugin will
+If you do, the git information will be cloned as well, and version control for your driver will
 contain all changes made to this template.
 
 Once you download and the template, unzip and navigate to the scripts directory as follows:
@@ -26,15 +26,15 @@ inside, you will find three scripts:
 
 Script | Description | Usage
 --------|------------------------|--------------
-update_names.py | A python script that updates occurances of the driver name | python3 update_names.py -n $NAME
+update_names.py | A python script that updates occurances of the driver name | Used through `initDriver.py`. To run by itself, run `initDriver.py` with the -o flag.
 add_pv.py | A python script that adds boilerplate code for new PVs to the driver | python3 add_pv.py -n $PV_NAME -t $PV_TYPE -d $PV_DTYPE
-initDriver.sh | A bash script that runs the update_names script and inits git version control | ./initDriver.sh $NAME
+initDriver.py | A python script that runs the update_names script and inits git version control | ./initDriver.py -n $NAME -s $SHORT_HAND_NAME
 
-To fully automate the initial setup, you may run the `initDriver.sh` script (requires bash > 4.0). This will run the `update_names.py` script, and initialize a git repo, and make an initial commit. You will need to add a remote repository in order to be able to push the git changes however, and a global git config is required for the git commands to function correctly.
+To fully automate the initial setup, you may run the `initDriver.py` script. This will run the `update_names.py` script, and initialize a git repo, and make an initial commit. You will need to add a remote repository in order to be able to push the git changes however, and a global git config is required for the git commands to function correctly.
 
-Alternatively, you may run the `update_names.py` script by itself, which will update all occurances of the driver name in the template to a name of your choosing.
+Alternatively, running `initDriver.py` with the `-o` flag will only run update_names.py by itself, and update occurrances of the driver name as specified.
 
-Also, make sure to replace this README.md file with one that explains how to use your new driver!
+Also, make sure to replace this README.md file with one that explains how to use your new driver (this is done automatically by `initDriver.py`)
 
 ### Using add_pv.py
 
@@ -66,3 +66,7 @@ python3 add_pv.py -n EXPOSURE_TIME -f -d Float64 -t analog
 python3 add_pv.py -n OPERATION_MODE -d Int32 -t multibit
 python3 add_pv.py -n STATUS_MESSAGE -d Octet -t waveform
 ```
+
+### Drivers developed with ADDriverTemplate
+
+Below is an expanding list of drivers developed with ADDriverTemplate. If you would like to add yours to the list, please feel free to open a pull request!

@@ -260,7 +260,7 @@ asynStatus ADDRIVERNAMESTANDARD::acquireStart(){
 
         // Here, either call the vendor acquisition function and pass the ADDRIVERNAMELOWERSHORTCallback as the callback function, or
         // call startImageAcquisitionThread()
-        status = startImageAcquisitionThread();
+        //status = startImageAcquisitionThread();
         if(status != asynSuccess){
             setIntegerParam(ADAcquire, 0);
             setIntegerParam(ADStatus, ADStatusIdle);
@@ -325,10 +325,10 @@ asynStatus ADDRIVERNAMESTANDARD::getDRIVERNAMESTANDARDFrameFormat(____* DRIVERNA
         case NDColorModeMono:
             switch(dataType) {
                 case NDUInt8:
-                    *DRIVERNAMELOWERSHORTDataType = 0;
+                    //*DRIVERNAMELOWERSHORTDataType = 0;
                     break;
                 case NDUInt16:
-                    *DRIVERNAMELOWERSHORTDataType = 1;
+                    //*DRIVERNAMELOWERSHORTDataType = 1;
                     break;
                 default:
                 asynPrint(this->pasynUserSelf, ASYN_TRACE_ERROR, "%s::%s Unsupported ColorMode + DataType combination\n", driverName, functionName);
@@ -338,10 +338,10 @@ asynStatus ADDRIVERNAMESTANDARD::getDRIVERNAMESTANDARDFrameFormat(____* DRIVERNA
         case NDColorModeRGB1:
             switch(dataType) {
                 case NDUInt8:
-                    *DRIVERNAMELOWERSHORTDataType = 2;
+                    //*DRIVERNAMELOWERSHORTDataType = 2;
                     break;
                 case NDUInt16:
-                    *DRIVERNAMELOWERSHORTDataType = 3;
+                    //*DRIVERNAMELOWERSHORTDataType = 3;
                     break;
                 default:
                 asynPrint(this->pasynUserSelf, ASYN_TRACE_ERROR, "%s::%s Unsupported ColorMode + DataType combination\n", driverName, functionName);
@@ -397,6 +397,22 @@ asynStatus ADDRIVERNAMESTANDARD::getFrameFormatND(______* DRIVERNAMELOWERSHORTFr
 }
 
 
+/**
+ * Function that converts DRIVERNAMESTANDARD frames into NDArrays for use with areaDetector
+ * 
+ * @params[in]:     DRIVERNAMELOWERSHORTFrame  -> pointer to currently acquired frame
+ * @params[out]:    dataType    -> pointer to output data type
+ * @params[out]:    colorMode   -> pointer to output color mode
+ * @return:         status
+ */
 asynStatus ADDRIVERNAMESTANDARD::DRIVERNAMELOWERSHORTFrame2NDArray(______* DRIVERNAMELOWERSHORTFrame, NDArray* pArray){
     
 }
+
+
+
+ADDRIVERNAMESTANDARD::ADDRIVERNAMESTANDARD(const char* portName, const char* serial, int maxbuffers, size_t maxMemory, int priority, int stackSize )
+    : ADDriver(portName, 1, (int)NUM_DRIVERNAMEUPPER_PARAMS, maxBuffers, maxMemory, asynEnumMask, asynEnumMask, ASYN_CANBLOCK, 1, priority, stackSize){
+    static const char* functionName = "ADDRIVERNAMESTANDARD";
+
+    
