@@ -61,26 +61,38 @@ update_names.run_all(name, shorthand)
 if only_update:
     print('Only update option selected, exiting...')
     exit()
+else:
+    next = input('Would you like to also auto-initialize driver doc files and version control? (y/n) > ')
 
-os.chdir('..')
+if next == 'y':
 
-gitignore_fp = open('gitignore', 'a')
-gitignore_fp.write('scripts/\n')
-gitignore_fp.close()
+    print('Initializing driver version control')
 
-os.rename('README.md', 'TemplateReadme.md')
+    os.chdir('..')
 
-readme_fp = open('README.md', 'w')
-readme_fp.write('# AD' + name + '\n')
-readme_fp.write('This driver is currently under development\n')
-readme_fp.close()
+    gitignore_fp = open('gitignore', 'a')
+    gitignore_fp.write('scripts/\n')
+    gitignore_fp.close()
 
-os.remove('LICENSE')
-license_fp = open('LICENSE', 'w')
-license_fp.close()
+    os.rename('README.md', 'TemplateReadme.md')
 
-subprocess.call(['git', 'init'])
-subprocess.call(['git', 'add', '-A'])
-subprocess.call(['git', 'commit', '-m', 'Initial Commit for AD' + name])
+    readme_fp = open('README.md', 'w')
+    readme_fp.write('# AD' + name + '\n')
+    readme_fp.write('Author:\n')
+    readme_fp.write('Created on:\n\n')
+    readme_fp.write('This driver is currently under development\n\n')
+    readme_fp.write('This driver was built with the help of [ADDriverTemplate](https://github.com/epicsNSLS2-areaDetector/ADDriverTemplate)\n\n')
+    readme_fp.close()
 
-print('AD' + name + ' driver initialized from ADDriverTemplate successfully.')
+    os.remove('LICENSE')
+    license_fp = open('LICENSE', 'w')
+    license_fp.close()
+
+    subprocess.call(['git', 'init'])
+    subprocess.call(['git', 'add', '-A'])
+    subprocess.call(['git', 'commit', '-m', 'Initial Commit for AD' + name])
+
+    print('AD' + name + ' driver initialized from ADDriverTemplate successfully.')
+
+else:
+    print('Exiting script...')
