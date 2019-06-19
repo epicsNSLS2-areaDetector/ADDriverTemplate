@@ -143,7 +143,7 @@ asynStatus ADDRIVERNAMESTANDARD::disconnectFromDeviceDRIVERNAMESTANDARD(){
  * 
  * @return: status
  */
-asynStatus ADDRIVERNAMESTANDARD::collectCameraInformation(){
+asynStatus ADDRIVERNAMESTANDARD::getDeviceInformation(){
     const char* functionName = "collectCameraInformation";
     asynStatus status = asynSuccess;
     asynPrint(this->pasynUserSelf, ASYN_TRACE_FLOW, "%s::%s Collecting camera information\n", driverName, functionName);

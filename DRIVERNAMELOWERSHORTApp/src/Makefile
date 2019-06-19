@@ -1,20 +1,30 @@
-OP=../..
+TOP=../..
 include $(TOP)/configure/CONFIG
-#----------------------------------
-#  Add MACRO DEFINITION AFTER THIS LINE
+#----------------------------------------
+#  ADD MACRO DEFINITIONS AFTER THIS LINE
 
-#----------------------------------
-#  Optimization of db files using dbst (default:NO)
-#DB_OPT = YES
+ifeq (windows-x64, $(findstring windows-x64, $(T_A)))
+USR_CPPFLAGS += -D__X64
+endif
 
-#-------------------------------------------
-# Create and install (or just install) 
-# databases, templates, subtitutions
-DB += ADDRIVERNAMESTANDARD.template
+USR_CPPFLAGS += -std=c++11
 
-#-------------------------------------------
-# If <anyname>.db template is not named <anyname>*.template add
-# <anyname>_TEMPLATE = <templatename>
+#UVC_HOME = /epics/support/areaDetector-3-2/ADUVC
+#USR_INCLUDES += -I$(UVC_HOME)/include/libuvc
+
+INC += ADDRIVERNAMESTANDARD.h
+
+LIBRARY_IOC = adDRIVERNAMESTANDARD
+LIB_SRCS += ADDRIVERNAMESTANDARD.cpp
+
+
+DBD += DRIVERNAMELOWERSHORTSupport.dbd
+
+
+#include $(ADCORE)/ADApp/commonLibraryMakefile
+
+#=============================
+
 include $(TOP)/configure/RULES
-#----------------------------------------------
-# ADD Rules after tis line.
+#----------------------------------------
+#  ADD RULES AFTER THIS LINE

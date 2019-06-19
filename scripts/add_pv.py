@@ -1,9 +1,20 @@
-# This is a script that allows for rapid adding of PVs to the driver, which
-# avoids having to edit 3 different files in a specific manner.
-#
-# Author: Jakub Wlodek
+#!/usr/bin/python3
+
+"""
+This is a script that allows for rapid adding of PVs to the driver, which
+avoids having to edit 3 different files in a specific manner.
+"""
+
+__author__      = "Jakub Wlodek"
+__copyright__   = "Copyright June 2019, Brookhaven Science Associates"
+__credits__     = ["Jakub Wlodek", "Kazimierz Gofron"]
+__license__     = "GPL"
+__version__     = "R0-1"
+__maintainer__  = "Jakub Wlodek"
+__status__      = "Production"
+
+
 # Created on: 10-Apr-2019
-#
 
 import os
 import argparse
@@ -20,8 +31,26 @@ path_to_header = "../DRIVERNAMELOWERSHORTApp/src/ADDRIVERNAMESTANDARD.h"
 path_to_source = "../DRIVERNAMELOWERSHORTApp/src/ADDRIVERNAMESTANDARD.cpp"
 name_of_driver = "ADDRIVERNAMESTANDARD"
 
-# Main function that writes necessary PV info to header and source files. Note that formatting may not be correct.
+
 def write_init_pv(pv_base_name, pv_string, driver_name, first_pv, dtype):
+    """
+    Main function that writes necessary PV info to header and source files. Note that formatting may not be correct.
+
+    Parameters
+    ----------
+    pv_base_name : str
+        pv name
+    pv_string : str
+        pv string to write in header file
+    driver_name : str
+        name of driver
+    first_pv : bool
+        toggle to see if it is the first PV
+    dtype : str
+        data type of string
+    """
+
+    # RENAME to OLD to not overwrite
     os.rename(path_to_header, path_to_header+"_OLD")
     os.rename(path_to_source, path_to_source+"_OLD")
     header_file_old = open(path_to_header+"_OLD", "r+")
@@ -29,6 +58,7 @@ def write_init_pv(pv_base_name, pv_string, driver_name, first_pv, dtype):
     header_file = open(path_to_header, "w+")
     source_file = open(path_to_source, "w+")
 
+    # make sure PV index is written
     pvIndexWritten = False
 
     line = header_file_old.readline()
@@ -39,23 +69,24 @@ def write_init_pv(pv_base_name, pv_string, driver_name, first_pv, dtype):
             header_file.write("#define "+driver_name+pv_base_name+"String "+'"'+pv_string+'"'+" //asynParam"+dtype+"\n")
         elif "FIRST_PARAM" in line:
             if first_pv == True and not pvIndexWritten:
-                header_file.write("int "+driver_name+pv_base_name+";\n")
+                header_file.write("        int "+driver_name+pv_base_name+";\n")
                 line = line.strip()
                 line = line.split(' ')
-                header_file.write(line[0]+" "+line[1]+ " "+driver_name+pv_base_name+"\n")
+                header_file.write("        "+line[0]+" "+line[1]+ " "+driver_name+pv_base_name+"\n")
                 pvIndexWritten = True
             else:
                 header_file.write(line)
         elif "LAST_PARAM" in line and first_pv == False and not pvIndexWritten:
-            header_file.write("int " + driver_name+pv_base_name+";\n")
+            header_file.write("        int " + driver_name+pv_base_name+";\n")
             line = line.strip()
             line = line.split(' ')
-            header_file.write(line[0]+" "+line[1]+ " "+driver_name+pv_base_name+"\n")
+            header_file.write("        "+line[0]+" "+line[1]+ " "+driver_name+pv_base_name+"\n")
             pvIndexWritten = True
         else:
             header_file.write(line)
         line = header_file_old.readline()
-    
+
+    # Find constructor and write the createParam call
     isConstructor = False
     line_src = source_file_old.readline()
     while line_src:
@@ -64,22 +95,23 @@ def write_init_pv(pv_base_name, pv_string, driver_name, first_pv, dtype):
             source_file.write(line_src)
         elif "{" in line_src and isConstructor:
             source_file.write(line_src)
-            source_file.write("createParam("+driver_name+pv_base_name+"String, asynParam"+dtype+", &"+driver_name+pv_base_name+");\n")
+            source_file.write("    createParam("+driver_name+pv_base_name+"String, asynParam"+dtype+", &"+driver_name+pv_base_name+");\n")
             isConstructor = False
         else:
             source_file.write(line_src)
         line_src = source_file_old.readline()
     header_file_old.close()
     source_file_old.close()
+    # Remove the temp files
     os.remove(path_to_header+"_OLD")
     os.remove(path_to_source+"_OLD")
     header_file.close()
     source_file.close()
 
 
-
-# Parses input PV string into PV names
 def parse_pv_string(pv_string):
+    """ Parses input PV string into PV names """
+
     parts = pv_string.split('_')
     pv_base_name = ""
     for i in range(0, len(parts)):
@@ -89,9 +121,9 @@ def parse_pv_string(pv_string):
     return pv_base_name, pv_readback_name
 
 
-
-# Writes a waveform pv to template file (waveforms have somewhat different fields)
 def write_pv_waveform(pv_string):
+    """ Writes a waveform pv to template file (waveforms have somewhat different fields) """
+
     pv_base_name, pv_readback_name = parse_pv_string(pv_string)
     template_file = open(path_to_template, "a+")
     template_file.write("\n\n")
@@ -111,9 +143,9 @@ def write_pv_waveform(pv_string):
     template_file.write('}\n')
 
 
-
-# writes a basic pv to the template file (note any PV specific info needs to be added after)
 def write_pv_basic(pv_string, pv_type, dtype):
+    """ writes a basic pv to the template file (note any PV specific info needs to be added after) """
+
     pv_base_name, pv_readback_name = parse_pv_string(pv_string)
     template_file = open(path_to_template, "a+")
     template_file.write("\n\n")
@@ -131,35 +163,35 @@ def write_pv_basic(pv_string, pv_type, dtype):
     template_file.write('}\n')
 
 
-
-# checks if data format is valid
 def check_valid_dform(data_format):
+    """ checks if data format is valid """
+
     for dform in datatypes:
         if data_format==dform:
             return True
     return False
 
 
-
-# checks if pv type is valid
 def check_valid_type(pv_type):
+    """ checks if pv type is valid """
+
     for ptype in pvtypes:
         if ptype[0] == pv_type:
             return True
     return False
 
 
-
-# gets the type of the PV
 def get_type(pv_type):
+    """ gets the type of the PV """
+
     for ptype in pvtypes:
         if ptype[0] == pv_type:
             return ptype
 
 
-
-# Parses user command line input
 def parse_args():
+    """ Parses user command line input """
+
     parser = argparse.ArgumentParser(description = "PV boilerplate code generator")
     parser.add_argument('-n', '--name', help='PV String name to be used. Should be all caps with underscores for spaces. ex: EXPOSURE_TIME')
     parser.add_argument('-t', '--type', help='Record type for the PV (binary, multibit, analog, string, waveform)')
@@ -190,4 +222,5 @@ def parse_args():
     write_init_pv(pv_base_name, pv_string, name_of_driver, arguments["first"], data_format)
 
 
+# Run the script
 parse_args()

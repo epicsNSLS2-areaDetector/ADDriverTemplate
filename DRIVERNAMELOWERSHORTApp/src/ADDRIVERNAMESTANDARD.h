@@ -20,17 +20,13 @@
 #define ADDRIVERNAMESTANDARD_MODIFICATION 0
 
 
+// Place PV string definitions here
+// #define ADDRIVERNAMEUPPERSHORT_PVNameString          "PV_NAME"            //asynInt32
 
 
 // Place any required inclues here
 
 #include "ADDriver.h"
-
-
-// Place PV string definitions here
-// #define ADDRIVERNAMEUPPERSHORT_PVNameString          "PV_NAME"            //asynInt32
- 
-
 
 
 // ----------------------------------------
