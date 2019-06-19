@@ -75,6 +75,10 @@ readme_fp.write('# AD' + name + '\n')
 readme_fp.write('This driver is currently under development\n')
 readme_fp.close()
 
+os.remove('LICENSE')
+license_fp = open('LICENSE', 'w')
+license_fp.close()
+
 subprocess.call(['git', 'init'])
 subprocess.call(['git', 'add', '-A'])
 subprocess.call(['git', 'commit', '-m', 'Initial Commit for AD' + name])

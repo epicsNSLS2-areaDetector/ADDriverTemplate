@@ -19,6 +19,13 @@ LIB_INSTALLS_Linux +=
 
 endif
 
+ifeq (windows-x64, $(findstring windows-x64, $(T_A)))
+
+#add libraries
+LIB_INSTALLS_Windows +=
+
+endif
+
 #=============================
 
 include $(TOP)/configure/RULES

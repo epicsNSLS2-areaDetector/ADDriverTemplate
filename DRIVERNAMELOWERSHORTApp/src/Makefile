@@ -10,7 +10,7 @@ include $(TOP)/configure/CONFIG
 #-------------------------------------------
 # Create and install (or just install) 
 # databases, templates, subtitutions
-DB += ADDriver____.template
+DB += ADDRIVERNAMESTANDARD.template
 
 #-------------------------------------------
 # If <anyname>.db template is not named <anyname>*.template add

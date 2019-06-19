@@ -1,1 +1,1 @@
-file "ADBase_settings.req", P=$(P),  R=image1:
+file "ADBase_settings.req", P=$(P),  R=$(R)
